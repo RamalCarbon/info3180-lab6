@@ -21,7 +21,9 @@ Vue.component('app-header', {
             </nav>
         </header>    
     `,
-    data: function() {return {}}
+    data: function() {
+        return {}
+    }
 });
 
 Vue.component('app-footer', {
@@ -39,6 +41,37 @@ Vue.component('app-footer', {
     }
 })
 
+Vue.component('news-list', {
+    template: `
+        <div class="news">
+        <h2>News</h2>
+            <ul class="news__list">
+                <li v-for="article in articles"class="news__item">{{ article.title }}</li>
+                <li v-for="article in articles" class="news__item">{{article.description}}</li>
+                <img  vbind:src="article.urlToImage">
+            </ul>
+        </div>
+    `,
+    
+    created: function() {
+        let self = this;
+        fetch('https://newsapi.org/v2/top-headlines?country=us&apiKey=1aa34c9d3bec4173a14910263cdd68be')
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(data) {
+         console.log(data);
+         self.articles = data.articles;
+        });
+    },
+    data: function() {
+        return {
+            articles: []
+        }
+    } 
+});
+
+
 
 let app = new Vue({
     el: '#app',
@@ -47,18 +80,4 @@ let app = new Vue({
     }
 });
 
-Vue.component('news-list', {
-    template:`
-        <div class="news">
-        <h2>News</h2>
-            <ul class="news__list">
-                <li class="news__item">News item 1</li>
-                <li class="news__item">News item 2</li>
-                <li class="news__item">News item 3</li>
-            </ul>
-        </div>
-        `,
-        
-        data: function() {}
-});
 
